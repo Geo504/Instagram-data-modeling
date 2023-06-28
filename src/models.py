@@ -15,7 +15,7 @@ class User(Base):
     lastname = Column(String(250), nullable=False)
     email = Column(String(250), unique=True, nullable=False)
 
-    posts = relationship('Post', backref='users',  lazy=True)
+    posts = relationship('Post', backref='users', lazy=True)
     comments = relationship('Comment', backref='users', lazy=True)
     followers = relationship('Follower', backref='users', lazy=True)
 
@@ -24,10 +24,9 @@ class Post(Base):
     __tablename__ = 'posts'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    # user = relationship(User, back_populates='posts')
 
-    comments = relationship('Comment', backref='posts', lazy=True)
-    medias = relationship('Media', backref='posts', lazy=True)
+    comments = relationship('Comment', backref='post', lazy=True)
+    media = relationship('Media', backref='post', lazy=True)
 
 
 class Comment(Base):
@@ -36,8 +35,6 @@ class Comment(Base):
     comment_text = Column(String(250), nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
-    # user = relationship(User, back_populates='comments')
-    # post = relationship(Post, back_populates='comments')
 
 
 class Media(Base):
@@ -46,7 +43,7 @@ class Media(Base):
     type = Column(String(250), nullable=False)
     url = Column(String(250), nullable=False)
     post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
-    # post = relationship(Post, back_populates='medias')
+    # post = relationship('Post', backref='media')
 
 
 class Follower(Base):
@@ -54,7 +51,6 @@ class Follower(Base):
     id = Column(Integer, primary_key=True)
     user_from_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     user_to_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    # user = relationship(User, back_populates='medias')
 
 
 ## Draw from SQLAlchemy base
